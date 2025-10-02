@@ -31,7 +31,7 @@
    
    users.users = {
      root.hashedPassword = "!"; # Disable root login
-     username = {
+     lgbt = {
        isNormalUser = true;
        extraGroups = [ "wheel" ];
        openssh.authorizedKeys.keys = [
