@@ -16,16 +16,18 @@
    };
    fileSystems."/boot" = {
      device = "/dev/disk/by-label/boot";
-     fsType = "ext4";
+     fsType = "vfat";
+     options = [ "fmask=0077" "dmask=0077" ];
    };
+   swapDevices = [ ];
    
    time.timeZone = "America/Detroit";
    i18n.defaultLocale = "en_US.UTF-8";
    console.keyMap = "us";
    
-   boot.loader.grub.enable = true;
-   boot.loader.grub.device = "/dev/sda";
-   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" "ext4" ];
+   boot.loader.systemd-boot.enable = true;
+   boot.loader.efi.canTouchEfiVariables = true;
+   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
    
    users.users = {
      root.hashedPassword = "!"; # Disable root login
