@@ -52,7 +52,7 @@
        KbdInteractiveAuthentication = false;
      };
    };
-   services.ssm-agent.enable = true;
+   services.amazon-ssm-agent.enable = true;
    
    networking.firewall.allowedTCPPorts = [ 22 ];
    
