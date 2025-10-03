@@ -8,7 +8,9 @@
    environment.systemPackages = with pkgs; [
      vim
      git
+     amazon-ssm-agent
    ];
+   environment.variables.EDITOR = "vim";
    
    fileSystems."/" = {
      device = "/dev/disk/by-label/nixos";
@@ -50,6 +52,7 @@
        KbdInteractiveAuthentication = false;
      };
    };
+   services.ssm-agent.enable = true;
    
    networking.firewall.allowedTCPPorts = [ 22 ];
    
