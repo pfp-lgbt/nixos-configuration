@@ -1,60 +1,39 @@
-{ pkgs, ... }:
- 
- {
-   nix.settings = {
-     experimental-features = "nix-command flakes";
-   };
-   
-   environment.systemPackages = with pkgs; [
-     vim
-     git
-     amazon-ssm-agent
-   ];
-   environment.variables.EDITOR = "vim";
-   
-   fileSystems."/" = {
-     device = "/dev/disk/by-label/nixos";
-     fsType = "ext4";
-   };
-   fileSystems."/boot" = {
-     device = "/dev/disk/by-label/boot";
-     fsType = "vfat";
-     options = [ "fmask=0077" "dmask=0077" ];
-   };
-   swapDevices = [ ];
-   
-   time.timeZone = "America/Detroit";
-   i18n.defaultLocale = "en_US.UTF-8";
-   console.keyMap = "us";
-   
-   boot.loader.systemd-boot.enable = true;
-   boot.loader.efi.canTouchEfiVariables = true;
-   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
-   
-   users.users = {
-     root.hashedPassword = "!"; # Disable root login
-     lgbt = {
-       isNormalUser = true;
-       extraGroups = [ "wheel" ];
-       openssh.authorizedKeys.keys = [
-         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJgW0mNhzaFegPBdf35nTks7bZVJQLMYh5ZgpA1V2GGb kelwing"
-       ];
-     };
-   };
-   
-   security.sudo.wheelNeedsPassword = false;
-   
-   services.openssh = {
-     enable = true;
-     settings = {
-       PermitRootLogin = "no";
-       PasswordAuthentication = false;
-       KbdInteractiveAuthentication = false;
-     };
-   };
-   services.amazon-ssm-agent.enable = true;
-   
-   networking.firewall.allowedTCPPorts = [ 22 ];
-   
-   system.stateVersion = "25.05";
- }
+{ _ }:
+{
+  imports = [
+    ./users.nix
+    ./hardware-configuration.nix
+  ];
+
+  nix.settings = {
+    experimental-features = "nix-command flakes";
+  };
+
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
+  };
+
+  time.timeZone = "UTC";
+  i18n.defaultLocale = "en_US.UTF-8";
+  console.keyMap = "us";
+
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
+  };
+
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 22 80 443 ];
+  };
+
+  system.stateVersion = "25.05";
+}
