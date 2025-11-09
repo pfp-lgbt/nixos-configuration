@@ -30,10 +30,14 @@
     };
   };
 
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 22 80 443 ];
+  networking = {
+    hostName = "pfplgbt";
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 22 80 443 ];
+    };
   };
+
 
   system.stateVersion = "25.05";
 }
